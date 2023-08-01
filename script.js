@@ -9,7 +9,7 @@ function game(rounds = 5) {
     for (let i = 0; i < rounds; i++) {
         userChoice = prompt("Choose your weapon: ");
         if (userChoice === null) {
-            return; // Quit the game
+            return; // No input then quit the game
         }
 
         computerChoice = getComputerChoice();
@@ -32,27 +32,16 @@ function game(rounds = 5) {
 }
 
 function getComputerChoice() {
-    let choice = Math.floor(Math.random() * CHOICES.length);
-    return CHOICES[choice];
+    let randomChoice = Math.floor(Math.random() * CHOICES.length);
+    return CHOICES[randomChoice];
 }
 
 function playRound(playerChoice, computerChoice) {
 
-    // Assumes inputs are one of the valid options
+    // Assumes inputs are valid
     playerChoice = playerChoice.toLowerCase();
     computerChoice = computerChoice.toLowerCase();
 
-    // Scenarios
-    // Draw
-    //   same choice
-    // Win
-    //   rock > scissors
-    //   paper > rock
-    //   scissors > paper
-    // Lose
-    //   rock < paper
-    //   paper < scissors
-    //   scissors < rock
     if (playerChoice === computerChoice) {
         return "draw";
     }
@@ -61,6 +50,10 @@ function playRound(playerChoice, computerChoice) {
         (playerChoice === "scissors" && computerChoice === "paper")) {
         return "win";
     }
+    // Otherwise lose
+    //   rock loses to paper
+    //   paper loses to  scissors
+    //   scissors loses to rock
     return "lose";
 }
 
