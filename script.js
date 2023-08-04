@@ -71,4 +71,4 @@ function displayGameResult(wins, losses, rounds) {
 }
 
 const CHOICES = ["rock", "paper", "scissors"];
-game();
+// game();

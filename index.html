@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,27 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
+
 <body>
-    <h1>Rock, Paper, Scissors</h1>
-    <p>Open the Web Developer Tools Console :)</p>
+    <h1 class="game-title">Welcome to RPS</h1>
+    <div class="game">
+        <div class="options computer">
+            <div class="option computer" id="computer-rock">Rock</div>
+            <div class="option computer" id="computer-paper">Paper</div>
+            <div class="option computer" id="computer-scissors">Scissors</div>
+        </div>
+        <div class="options player">
+            <div class="option player" id="rock">Rock</div>
+            <div class="option player" id="paper">Paper</div>
+            <div class="option player" id="scissors">Scissors</div>
+        </div>
+    </div>
+    <div class="results">
+        <p>First to five. Get ready!</p>
+        <p>Computer: <span id="computer-score">0</span></p>
+        <p>You: <span id="player-score">0</span></p>
+    </div>
+    <div class="option restart">Restart</div>
 </body>
+
 </html>
