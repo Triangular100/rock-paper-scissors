@@ -42,9 +42,9 @@ body {
     align-items: center;
     width: 100px;
     height: 55px;
-
     border: 3px solid black;
     border-radius: 10px;
+    transition: transform .2s ease-in;
 }
 
 .option.player,
@@ -71,4 +71,23 @@ body {
     width: 100%;
     max-width: 315px;
     height: 50px;
+}
+
+.select.option {
+    transform: scale(1.1);
+}
+
+.win.option,
+.win.option:hover {
+    background-color: #DDFFDD;
+}
+
+.lose.option,
+.lose.option:hover {
+    background-color: #FFCCCC;
+}
+
+.draw.option,
+.draw.option:hover {
+    background-color: #DEDEDE;
 }

@@ -1,33 +1,18 @@
-
-function game(rounds = 5) {
-    let userChoice, computerChoice, roundOutcome;
-    let wins = 0;
-    let losses = 0;
-
-    console.log(`Welcome to rock, paper, scissors. Play ${rounds} rounds. Get ready!`);
-
-    for (let i = 0; i < rounds; i++) {
-        userChoice = prompt("Choose your weapon: ");
-        if (userChoice === null) {
-            return; // No input then quit the game
-        }
-
-        computerChoice = getComputerChoice();
-        console.log(`Your choice: ${userChoice}. Computer's choice: ${computerChoice}`);
-
-        roundOutcome = playRound(userChoice, computerChoice);
-        if (roundOutcome === "win") {
-            console.log("You won this round!");
-            wins++;
-        } else if (roundOutcome === "lose") {
-            console.log("You lost this round.");
-            losses++;
-        } else {
-            console.log("It's a draw.");
-        }
+function playOption(event) {
+    if (gameOver) {
+        return;
     }
 
-    displayGameResult(wins, losses, rounds);
+    let playerChoice = event.target.id;
+    let computerChoice = getComputerChoice();
+    let outcome = playRound(playerChoice, computerChoice);
+
+    draw(event.target, computerOptions[computerChoice], outcome);
+
+    if (determineGameOver()) {
+        setTimeout(drawResults, 1500, outcome);
+        return;
+    }
 
 }
 
@@ -48,43 +33,53 @@ function playRound(playerChoice, computerChoice) {
     if ((playerChoice === "rock" && computerChoice === "scissors") ||
         (playerChoice === "paper" && computerChoice === "rock") ||
         (playerChoice === "scissors" && computerChoice === "paper")) {
+        wins++;
         return "win";
     }
     // Otherwise lose
-    //   rock loses to paper
-    //   paper loses to  scissors
-    //   scissors loses to rock
+    //   rock < paper
+    //   paper < scissors
+    //   scissors < rock
+    losses++;
     return "lose";
 }
 
-function displayGameResult(wins, losses, rounds) {
-    let draws = rounds - wins - losses;
-    console.log("Game results:");
-    console.log(`Wins: ${wins}, losses: ${losses}, draws: ${draws}.`);
-    if (wins === losses) {
-        console.log(`It's a draw!`);
-    } else if (wins > losses) {
-        console.log(`You won!`);
-    } else {
-        console.log(`You lost. Better luck next time!`);
+function determineGameOver() {
+    if (wins >= 5 || losses >= 5) {
+        gameOver = true;
+        return true;
     }
+    return false;
 }
 
-function playButtonChoice(event) {
-    choice = event.target.id;
-    console.log(choice);
-    if (choice === "rock") {
-        wins++;
-    } else {
-        losses++;
-    }
+function drawResults(playerOutcome) {
+    removeLastChoices();
+    playerOptions.forEach(option => displayChoice(option, playerOutcome));
+    let computerOutcome = opposite(playerOutcome);
+    Object.values(computerOptions).forEach(option => displayChoice(option, computerOutcome));
     displayScore();
 }
 
-function restartGame(e) {
-    wins = 0;
-    losses = 0;
+function draw(playerChoice, computerChoice, playerOutcome) {
+    removeLastChoices();
+    displayChoice(playerChoice, playerOutcome);
+    let computerOutcome = opposite(playerOutcome);
+    displayChoice(computerChoice, computerOutcome);
     displayScore();
+}
+
+function displayChoice(choice, outcome) {
+    choice.classList.add(outcome);
+    choice.classList.add("select");
+}
+
+function opposite(outcome) {
+    if (outcome === "win") {
+        return "lose";
+    } else if (outcome === "lose") {
+        return "win";
+    }
+    return "draw";
 }
 
 function displayScore() {
@@ -92,14 +87,49 @@ function displayScore() {
     playerScore.textContent = wins;
 }
 
+function restartGame(e) {
+    e.target.classList.add("select");
+    displayReset();
+    removeLastChoices();
+    gameOver = false;
+    wins = 0;
+    losses = 0;
+    displayScore();
+}
+
+function displayReset() {
+    options.forEach(option => option.classList.add("select"));
+}
+
+function removeLastChoices() {
+    options.forEach(option => {
+        option.classList.remove("win");
+        option.classList.remove("lose");
+        option.classList.remove("draw");
+    });
+}
+
+function removeTransition(e) {
+    e.target.classList.remove("select");
+}
+
 const CHOICES = ["rock", "paper", "scissors"];
+let gameOver = false;
 let wins = 0;
 let losses = 0;
 
-const restartButton = document.querySelector(".restart");
-const playButtons = document.querySelectorAll(".player.option");
+const options = document.querySelectorAll(".option"); // Player and Computer Options
+const restartOption = document.querySelector(".restart");
+const playerOptions = document.querySelectorAll(".player.option");
+const computerOptions = {
+    "rock": document.querySelector("#computer-rock"),
+    "paper": document.querySelector("#computer-paper"),
+    "scissors": document.querySelector("#computer-scissors")
+};
+
 const computerScore = document.querySelector("#computer-score");
 const playerScore = document.querySelector("#player-score");
 
-restartButton.addEventListener("click", restartGame);
-playButtons.forEach(button => button.addEventListener("click", playButtonChoice));
+restartOption.addEventListener("click", restartGame);
+playerOptions.forEach(option => option.addEventListener("click", playOption));
+options.forEach(option => option.addEventListener("transitionend", removeTransition));
