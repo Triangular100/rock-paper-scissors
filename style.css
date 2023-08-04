@@ -44,7 +44,7 @@ body {
     height: 55px;
     border: 3px solid black;
     border-radius: 10px;
-    transition: transform .2s ease-in;
+    transition: transform .25s ease-in;
 }
 
 .option.player,
