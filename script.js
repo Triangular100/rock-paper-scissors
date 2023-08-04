@@ -70,5 +70,36 @@ function displayGameResult(wins, losses, rounds) {
     }
 }
 
+function playButtonChoice(event) {
+    choice = event.target.id;
+    console.log(choice);
+    if (choice === "rock") {
+        wins++;
+    } else {
+        losses++;
+    }
+    displayScore();
+}
+
+function restartGame(e) {
+    wins = 0;
+    losses = 0;
+    displayScore();
+}
+
+function displayScore() {
+    computerScore.textContent = losses;
+    playerScore.textContent = wins;
+}
+
 const CHOICES = ["rock", "paper", "scissors"];
-// game();
+let wins = 0;
+let losses = 0;
+
+const restartButton = document.querySelector(".restart");
+const playButtons = document.querySelectorAll(".player.option");
+const computerScore = document.querySelector("#computer-score");
+const playerScore = document.querySelector("#player-score");
+
+restartButton.addEventListener("click", restartGame);
+playButtons.forEach(button => button.addEventListener("click", playButtonChoice));
